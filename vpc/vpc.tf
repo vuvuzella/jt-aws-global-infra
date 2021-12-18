@@ -1,17 +1,8 @@
 /**********************************************************
- * VPC CONFIGURATION
- * 10.20.0.0/16 (65536 gross ip addresses)
+ *
+ * VPC DATA
+ *
  **********************************************************/
-resource "aws_vpc" "jt_aws_vpc_main" {
-  cidr_block = "10.20.0.0/16"
-  instance_tenancy = "default"
-  enable_dns_support = true
-  enable_dns_hostnames = false
-  tags = {
-    "Name" = "jt_aws_vpc_main"
-  }
-}
-
 data "aws_availability_zones" "az-2a" {
   all_availability_zones = true
   filter {
@@ -38,6 +29,41 @@ data "aws_availability_zones" "az-2c" {
 
 data "aws_availability_zones" "all_azs" {
   all_availability_zones = true
+}
+
+/**********************************************************
+ * VPC CONFIGURATION
+ * 10.20.0.0/16 (65536 gross ip addresses)
+ **********************************************************/
+resource "aws_vpc" "jt_aws_vpc_main" {
+  cidr_block = "10.20.0.0/16"
+  instance_tenancy = "default"
+  enable_dns_support = true
+  enable_dns_hostnames = false
+  tags = {
+    "Name" = "jt_aws_vpc_main"
+  }
+}
+
+/**********************************************************
+ *
+ * VPC SECURITY GROUP CONFIGURATION
+ *
+ **********************************************************/
+resource "aws_default_security_group" "egress_only" {
+  // name = "jt-aws-egress-only"
+  // description = "An egress only security group for jt_aws_vpc_main"
+  vpc_id = aws_vpc.jt_aws_vpc_main.id
+  egress {
+    from_port = 0
+    to_port = 0
+    protocol = -1
+    cidr_blocks = ["10.20.0.0/16"]
+  }
+
+  tags = {
+    "Name" = "jt_aws_vpc_main_default_sg"
+  }
 }
 
 /**********************************************************
