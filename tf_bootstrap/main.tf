@@ -14,7 +14,6 @@ terraform {
     dynamodb_table = "global-infrastructure-locks"
     encrypt = true
     profile = "admin-dev"
-    kms_key_id = "alias/tfstate-bucket-key"
   }
 }
 
@@ -47,8 +46,7 @@ resource "aws_s3_bucket" "states" {
   server_side_encryption_configuration {
     rule {
       apply_server_side_encryption_by_default {
-        kms_master_key_id = aws_kms_key.bucket_key.arn
-        sse_algorithm = "aws:kms"
+        sse_algorithm = "aws:kms" // use aws/s3
       }
     }
   }
@@ -100,8 +98,8 @@ resource "aws_s3_bucket" "projects_bucket" {
   server_side_encryption_configuration {
     rule {
       apply_server_side_encryption_by_default {
-        kms_master_key_id = aws_kms_key.bucket_key.arn
-        sse_algorithm = "aws:kms"
+        // kms_master_key_id = aws_kms_key.bucket_key.arn
+        sse_algorithm = "aws:kms" // use aws/s3
       }
     }
   }
@@ -127,13 +125,13 @@ resource "aws_s3_bucket_public_access_block" "projects_bucket_block_public_acces
 #------------------------------------------------
 # KMS keys to encrypt our buckets
 #------------------------------------------------
-resource "aws_kms_key" "bucket_key" {
-  description = "This key is used to encrypt tfstate s3 buckets"
-  deletion_window_in_days = 10
-  enable_key_rotation = true
-}
-
-resource "aws_kms_alias" "bucket_key_alias" {
-  name = "alias/tfstate-bucket-key" 
-  target_key_id = aws_kms_key.bucket_key.key_id
-}
+// resource "aws_kms_key" "bucket_key" {
+//   description = "This key is used to encrypt tfstate s3 buckets"
+//   deletion_window_in_days = 10
+//   enable_key_rotation = true
+// }
+// 
+// resource "aws_kms_alias" "bucket_key_alias" {
+//   name = "alias/tfstate-bucket-key" 
+//   target_key_id = aws_kms_key.bucket_key.key_id
+// }
