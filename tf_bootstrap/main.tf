@@ -56,6 +56,7 @@ resource "aws_s3_bucket" "states" {
   # comment out when destroying the state bucket
   # force_destroy = true
 }
+
 #------------------------------------------------
 # Block public access policy for states bucket
 #------------------------------------------------
