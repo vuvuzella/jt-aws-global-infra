@@ -17,5 +17,11 @@ pushd "dist"
 zip -r app.zip ./*
 mv app.zip ../../artifacts/
 popd
-zip -r dependencies.zip node_modules/*
+if [ ! -d "./nodejs" ];
+then
+  mkdir nodejs
+fi
+cp -r node_modules ./nodejs
+zip -r dependencies.zip nodejs
 mv dependencies.zip ../artifacts/
+rm -rf ./nodejs

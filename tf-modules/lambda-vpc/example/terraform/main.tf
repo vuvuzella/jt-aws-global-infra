@@ -22,8 +22,9 @@ provider "aws" {
 }
 
 module "lambda-vpc-example" {
-  source        = "../../src"
-  function_name = "example-lambda-vpc"
-  file_path     = "../example/artifacts/app.zip" 
-  handler       = "index.handler"
+  source         = "../../src"
+  function_name  = "example-lambda-vpc"
+  file_path      = "../example/artifacts/app.zip" 
+  dependency_path = "../example/artifacts/dependencies.zip"
+  handler        = "index.handler"
 }
