@@ -21,10 +21,34 @@ provider "aws" {
   region  = "ap-southeast-2"
 }
 
+locals {
+  vpc_id = "vpc-089db66b70fffa9df"
+}
+
+data "aws_subnets" "subnet" {
+  filter {
+    name = "vpc-id"
+    values = [local.vpc_id]
+  }
+}
+
+data "aws_security_groups" "sg" {
+  filter {
+    name = "vpc-id"
+    values = [local.vpc_id]
+  }
+}
+
 module "lambda-vpc-example" {
-  source         = "../../src"
-  function_name  = "example-lambda-vpc"
-  file_path      = "../example/artifacts/app.zip" 
+  source          = "../../src"
+  function_name   = "example-lambda-vpc"
+  file_path       = "../example/artifacts/app.zip"
+  handler         = "index.handler"
+  aws_account_id  = "536674233911"
   dependency_path = "../example/artifacts/dependencies.zip"
-  handler        = "index.handler"
+  # Filling in vpc_config will make the lambda connect to a vpc
+  # vpc_config      = {
+  #   subnet_ids = data.aws_subnets.subnet.ids
+  #   security_group_ids = data.aws_security_groups.sg.ids
+  # }
 }
