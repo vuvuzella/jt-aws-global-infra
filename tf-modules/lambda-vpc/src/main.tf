@@ -9,8 +9,8 @@ terraform {
 }
 
 locals {
-  full_filename = "${path.module}/${var.file_path}"
-  full_dependency_path = "${path.module}/${var.dependency_path}"
+  full_filename        = "${path.root}/${var.file_path}"
+  full_dependency_path = "${path.root}/${var.dependency_path}"
 }
 
 resource "aws_lambda_function" "lambda" {

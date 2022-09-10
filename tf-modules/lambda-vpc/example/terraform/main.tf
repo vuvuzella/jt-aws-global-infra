@@ -42,10 +42,10 @@ data "aws_security_groups" "sg" {
 module "lambda-vpc-example" {
   source          = "../../src"
   function_name   = "example-lambda-vpc"
-  file_path       = "../example/artifacts/app.zip"
+  file_path       = "../artifacts/app.zip"
   handler         = "index.handler"
-  aws_account_id  = "536674233911"
-  dependency_path = "../example/artifacts/dependencies.zip"
+  aws_account_id  = "536674233911"  // TODO: Retrieve from SSM
+  dependency_path = "../artifacts/dependencies.zip"
   # Filling in vpc_config will make the lambda connect to a vpc
   # vpc_config      = {
   #   subnet_ids = data.aws_subnets.subnet.ids
