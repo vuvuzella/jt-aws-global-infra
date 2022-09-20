@@ -5,9 +5,10 @@ variable "gw_name" {
 
 variable "lambdas" {
   type = list(object({
+    function_name = string
     description = string
-    uri = string
-    integration_method = string
+    file_path = string
+    handler = string
   }))
   description = "list of lambda function data to integrate with the pai gateway"
 }
