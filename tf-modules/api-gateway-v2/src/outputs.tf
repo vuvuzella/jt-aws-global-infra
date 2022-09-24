@@ -12,3 +12,8 @@ output "execution_arn" {
   description = "ARN prefix to be used in an aws_lambda_permission"
   value = aws_apigatewayv2_api.apigw.execution_arn
 }
+
+output "lambdas_output" {
+  description = "Test lambda output"
+  value = var.lambdas
+}

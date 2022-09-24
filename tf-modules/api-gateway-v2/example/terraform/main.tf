@@ -28,21 +28,21 @@ locals {
 module "api-gateway-v2" {
   source = "../../src"
   gw_name = "api-gw-v2-example"
-  lambdas = [
-    {
-      description = "Example Lambda 1 integration"
-      uri = module.example_lambda_1.invoke_arn
-      integration_method = "post"
+  dependency_path = "../artifacts/dependencies.zip"
+  lambdas = {
+    example-apigw-lambda-1 = {
+      description = "Handler 1"
+      file_path = "../artifacts/app.zip"
+      handler = "index.handler"
     }
-  ]
+    example-apigw-lambda-2 = {
+      description = "Handler 2"
+      file_path = "../artifacts/app.zip"
+      handler = "index.handler"
+    }
+  }
 }
 
-module "example_lambda_1" {
-  # source = "git::ssh://vuvuzella@github.com/tf-modules/lambda-vpc/src"
-  source            = "github.com/vuvuzella/jt-aws-global-infra/tf-modules/lambda-vpc/src"
-  function_name     = "example-apigw-lambda-1"
-  file_path         = "../artifacts/app.zip"
-  handler           = "index.handler"
-  aws_account_id    = "536674233911"  // TODO: Retrieve from SSM
-  dependency_path   = "../artifacts/dependencies.zip"
+output "printout" {
+  value = module.api-gateway-v2.lambdas_output
 }
